@@ -1,8 +1,7 @@
 // This clears the last interval.
 clearInterval(window.lastRemoverInterval);
 
-// Change this to be whatever the class name is for 
-clsName = 'messageContent-2qWWxC';
+clsName = [...(document.querySelector('[class*=messageContent-]')?.classList ?? [])].find(v => v.startsWith('messageContent-'));
 
 queryForRemover = `.${clsName}:not(.iHidThis)`;
 
@@ -29,7 +28,7 @@ function removerFn() {
         console.info(`removed ${numRemoved} comments`);
     }
 }
-if (!document.querySelectorAll(queryForRemover).length) {
-    console.error('No such elements found. Check the clsName. Not starting the interval.');
+if (!clsName) {
+    console.error('Failed to find relevant element. Not starting the interval.');
 }
 window.lastRemoverInterval = setInterval(removerFn, 2000);
