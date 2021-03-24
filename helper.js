@@ -8,6 +8,10 @@ clsName = [...(queryFrom.querySelector('[class*=messageContent-]')?.classList ??
 queryForRemover = `.${clsName}:not(.iHidThis)`;
 
 function removerFn() {
+    if (document.hidden) {
+        // Window is not active. Do not waste CPU.
+        return;
+    }
     numRemoved = 0;
     var elements = queryFrom.querySelectorAll(queryForRemover);
     [...elements].map(v => {
@@ -33,4 +37,4 @@ function removerFn() {
 if (!clsName) {
     console.error('Failed to find relevant element. Not starting the interval.');
 }
-window.lastRemoverInterval = setInterval(removerFn, 2000);
+window.lastRemoverInterval = setInterval(removerFn, 500);
