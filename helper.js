@@ -1,13 +1,15 @@
 // This clears the last interval.
 clearInterval(window.lastRemoverInterval);
 
-clsName = [...(document.querySelector('[class*=messageContent-]')?.classList ?? [])].find(v => v.startsWith('messageContent-'));
+queryFrom = document.querySelector('main').parentElement;
+
+clsName = [...(queryFrom.querySelector('[class*=messageContent-]')?.classList ?? [])].find(v => v.startsWith('messageContent-'));
 
 queryForRemover = `.${clsName}:not(.iHidThis)`;
 
 function removerFn() {
     numRemoved = 0;
-    var elements = document.querySelectorAll(queryForRemover);
+    var elements = queryFrom.querySelectorAll(queryForRemover);
     [...elements].map(v => {
         
         if (v.innerText === '$w') {
