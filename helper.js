@@ -12,7 +12,7 @@ function removerFn() {
     var elements = queryFrom.querySelectorAll(queryForRemover);
     [...elements].map(v => {
         
-        if (v.innerText === '$w') {
+        if (v.innerText === '$w' || v.innerText === '$|') {
             try {
                 v.closest('[role=listitem]').style.display = "none";
                 v.classList.add('iHidThis');
