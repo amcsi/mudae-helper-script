@@ -5,7 +5,7 @@ queryFrom = document.querySelector('main').parentElement;
 
 clsName = [...(queryFrom.querySelector('[class*=messageContent-]')?.classList ?? [])].find(v => v.startsWith('messageContent-'));
 
-queryForRemover = `.${clsName}:not(.iHidThis)`;
+queryForRemover = `.${clsName}:not(.iMarkedThis)`;
 
 function removerFn() {
     if (document.hidden) {
@@ -15,11 +15,11 @@ function removerFn() {
     numRemoved = 0;
     var elements = queryFrom.querySelectorAll(queryForRemover);
     [...elements].map(v => {
+        v.classList.add('iMarkedThis');
         
         if (v.innerText === '$w' || v.innerText === '$|') {
             try {
                 v.closest('[role=listitem]').style.display = "none";
-                v.classList.add('iHidThis');
             } catch (e) {
                 // Don't crash if e.g. the element to delete ends up being missing.
             }
@@ -37,4 +37,4 @@ function removerFn() {
 if (!clsName) {
     console.error('Failed to find relevant element. Not starting the interval.');
 }
-window.lastRemoverInterval = setInterval(removerFn, 500);
+window.lastRemoverInterval = setInterval(removerFn, 200);
