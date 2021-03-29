@@ -8,7 +8,7 @@ clsName = [...(queryFrom.querySelector('[class*=messageContent-]')?.classList ??
 queryForRemover = `.${clsName}:not(.iMarkedThis)`;
 
 function removerFn() {
-    if (document.hidden) {
+    if (document.hidden || window.removerInactive) {
         // Window is not active. Do not waste CPU.
         return;
     }
@@ -38,3 +38,15 @@ if (!clsName) {
     console.error('Failed to find relevant element. Not starting the interval.');
 }
 window.lastRemoverInterval = setInterval(removerFn, 200);
+
+// These event listeners prevent the script running while the window is inactive. This includes if focus is on the Dev Tools.
+window.removeEventListener('blur', window.removerOnWindowBlur);
+window.removeEventListener('focus', window.removerOnWindowFocus);
+window.removerOnWindowBlur = function() {
+    window.removerInactive = true;
+}
+window.removerOnWindowFocus = function() {
+    window.removerInactive = false;
+}
+window.addEventListener('focus', window.removerOnWindowFocus);
+window.addEventListener('blur', window.removerOnWindowBlur);
