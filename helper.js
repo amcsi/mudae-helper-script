@@ -35,8 +35,11 @@ function removerFn() {
     }
 }
 if (!clsName) {
-    console.error('Failed to find relevant element. Not starting the interval.');
+    throw 'Failed to find relevant element. Not starting the interval.';
 }
+// The one that will need to float left.
+removerMessageClass = [...(queryFrom.querySelector('[class*=cozyMessage-]').classList ?? [])].find(v => v.startsWith('message-'));
+
 window.lastRemoverInterval = setInterval(removerFn, 200);
 
 // These event listeners prevent the script running while the window is inactive. This includes if focus is on the Dev Tools.
@@ -50,3 +53,17 @@ window.removerOnWindowFocus = function() {
 }
 window.addEventListener('focus', window.removerOnWindowFocus);
 window.addEventListener('blur', window.removerOnWindowBlur);
+
+var removerStyleEl = document.getElementById('removerStyle');
+if (!removerStyleEl) {
+    removerStyleEl = document.createElement("style")
+    removerStyleEl.type = "text/css"
+    document.head.appendChild(removerStyleEl);
+}
+
+// CSS.
+removerStyleEl.innerText = `
+    .${removerMessageClass} {
+        float: left;
+    }
+`;
