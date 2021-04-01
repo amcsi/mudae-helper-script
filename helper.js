@@ -17,7 +17,9 @@ function removerFn() {
     [...elements].map(v => {
         v.classList.add('iMarkedThis');
         
-        if (v.innerText === '$w' || v.innerText === '$|') {
+        if (v.innerText.match(/^\$[wh][ga]?$/)) {
+            // Roll command. Hide the text.
+
             try {
                 v.closest('[role=listitem]').style.display = "none";
             } catch (e) {
