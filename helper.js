@@ -29,6 +29,15 @@ function removerFn() {
             numRemoved += 1;
             return true;
         }
+
+        if (v.innerText.match(/\broll/i)) {
+            // A comment with "rolls" in it? Mark it with a class to do float clearing.
+            try {
+                v.closest('[role=listitem]').classList.add('rollText');
+            } catch (e) {
+                // Don't crash if e.g. the element to delete ends up being missing.
+            }
+        }
         
         return false;
     });
@@ -67,5 +76,10 @@ if (!removerStyleEl) {
 removerStyleEl.innerText = `
     .${removerMessageClass} {
         float: left;
+    }
+
+    .rollText {
+        float: none;
+        clear: both;
     }
 `;
