@@ -81,6 +81,10 @@ removerStyleEl.innerHTML = `
         float: left;
     }
 
+    .${removerMessageClass}.${removerMessageClass} {
+        min-height: 585px;
+    }
+
     .rollText {
         float: none;
         clear: both;
