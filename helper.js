@@ -70,12 +70,13 @@ window.addEventListener('blur', window.removerOnWindowBlur);
 var removerStyleEl = document.getElementById('removerStyle');
 if (!removerStyleEl) {
     removerStyleEl = document.createElement("style")
+    removerStyleEl.id = 'removerStyle';
     removerStyleEl.type = "text/css"
     document.head.appendChild(removerStyleEl);
 }
 
 // CSS.
-removerStyleEl.innerText = `
+removerStyleEl.innerHTML = `
     .${removerMessageClass} {
         float: left;
     }
