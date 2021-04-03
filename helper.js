@@ -16,8 +16,10 @@ function removerFn() {
     var elements = queryFrom.querySelectorAll(queryForRemover);
     [...elements].map(v => {
         v.classList.add('iMarkedThis');
+
+        const text = v.innerText;
         
-        if (v.innerText.match(/^\$[wh][ga]?$/)) {
+        if (text.match(/^\$[wh][ga]?$/)) {
             // Roll command. Hide the text.
 
             try {
@@ -30,8 +32,8 @@ function removerFn() {
             return true;
         }
 
-        if (v.innerText.match(/\broll/i)) {
-            // A comment with "rolls" in it? Mark it with a class to do float clearing.
+        if (text.match(/\broll/i) || text.includes("you can't claim for another") || text.includes('you can claim right now')) {
+            // A comment with "rolls" in it? Or a $tu result? Mark it with a class to do float clearing.
             try {
                 v.closest('[role=listitem]').classList.add('rollText');
             } catch (e) {
