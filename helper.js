@@ -1,7 +1,11 @@
 // This clears the last interval.
 clearInterval(window.lastRemoverInterval);
+(window.lastRemoverIntervals ?? []).forEach(clearInterval);
+window.lastRemoverIntervals = [];
 
 queryFrom = document.querySelector('main').parentElement;
+
+secondsToClaim = 43;
 
 function getClassNameStartingWith(name, queryFrom = document) {
   return [...(queryFrom.querySelector(`[class*=${name}-]`)?.classList ?? [])].find(v => v.startsWith(`${name}-`));
@@ -14,11 +18,7 @@ avatarClassName = getClassNameStartingWith('avatar', queryFrom.querySelector(`.$
 
 queryForRemover = `.${clsName}:not(.iMarkedThis)`;
 
-function removerFn() {
-  if (document.hidden || window.removerInactive) {
-    // Window is not active. Do not waste CPU.
-    return;
-  }
+function removerFn(isFirstRun) {
   numRemoved = 0;
   var elements = queryFrom.querySelectorAll(queryForRemover);
   [...elements].map(v => {
@@ -56,6 +56,33 @@ function removerFn() {
       // Need to override the padding as important on the style element to counteract Discord's
       // setting of it when clicking to react with an emoji.
       messageElement.style.setProperty('padding', '0', 'important');
+
+      if (!isFirstRun && messageElement.innerText.includes('React with any emoji to claim!')) {
+        // Timer time!
+
+        const timerDiv = document.createElement('div');
+        timerDiv.classList.add('removerTimer');
+        function setTimerSecondsLeft(secondsLeft) {
+          if (secondsLeft) {
+            timerDiv.innerHTML = `⏰ T-<strong>${secondsLeft}</strong>`;
+          } else {
+            timerDiv.innerText = `🔒 Time is up.`;
+          }
+        }
+        messageElement.append(timerDiv);
+        setTimerSecondsLeft(secondsToClaim);
+
+        const startMillis = (new Date()).getTime();
+        const interval = setInterval(() => {
+          const secondsElapsed = Math.ceil(((new Date()).getTime() - startMillis) / 1000);
+          const secondsLeft = secondsToClaim - secondsElapsed;
+          setTimerSecondsLeft(secondsLeft);
+          if (secondsLeft <= 0) {
+            clearInterval(interval);
+          }
+        }, 200);
+        window.lastRemoverIntervals.push(interval);
+      }
     }
 
     return false;
@@ -68,6 +95,7 @@ if (!clsName) {
   throw 'Failed to find relevant element. Not starting the interval.';
 }
 
+removerFn(true);
 window.lastRemoverInterval = setInterval(removerFn, 200);
 
 // These event listeners prevent the script running while the window is inactive. This includes if focus is on the Dev Tools.
@@ -114,5 +142,8 @@ removerStyleEl.innerHTML = `
     }
     div[class^=sidebar-]:not(:hover) {
         width: 50px;
+    }
+    .removerTimer {
+      color: white;
     }
 `;
