@@ -50,7 +50,8 @@ function removerFn(isFirstRun) {
       }
     }
 
-    if (messageElement.querySelector('[class*=embedWrapper-]')) {
+    const embedWrapper = messageElement.querySelector('[class*=embedWrapper-]')
+    if (embedWrapper) {
       // It has an embed.
       messageElement.classList.add('hasEmbed');
       // Need to override the padding as important on the style element to counteract Discord's
@@ -69,7 +70,7 @@ function removerFn(isFirstRun) {
             timerDiv.innerText = `🔒 Time is up.`;
           }
         }
-        messageElement.append(timerDiv);
+        embedWrapper.append(timerDiv);
         setTimerSecondsLeft(secondsToClaim);
 
         const startMillis = (new Date()).getTime();
@@ -78,6 +79,7 @@ function removerFn(isFirstRun) {
           const secondsLeft = secondsToClaim - secondsElapsed;
           setTimerSecondsLeft(secondsLeft);
           if (secondsLeft <= 0) {
+            messageElement.classList.add('timeIsUp');
             clearInterval(interval);
           }
         }, 200);
@@ -142,6 +144,9 @@ removerStyleEl.innerHTML = `
     }
     div[class^=sidebar-]:not(:hover) {
         width: 50px;
+    }
+    .timeIsUp div[class^=embedWrapper-] {
+        background-color: #111;
     }
     .removerTimer {
       color: white;
