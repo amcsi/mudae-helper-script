@@ -8,7 +8,9 @@ function getClassNameStartingWith(name, queryFrom = document) {
 }
 
 clsName = getClassNameStartingWith('messageContent', queryFrom);
-avatarClassName = getClassNameStartingWith('avatar', queryFrom.querySelector(['[data-list-id="chat-messages"]']));
+// The one that will need to float left.
+removerMessageClass = getClassNameStartingWith('cozyMessage', queryFrom);
+avatarClassName = getClassNameStartingWith('avatar', queryFrom.querySelector(`.${removerMessageClass}`));
 
 queryForRemover = `.${clsName}:not(.iMarkedThis)`;
 
@@ -51,6 +53,9 @@ function removerFn() {
     if (messageElement.querySelector('[class*=embedWrapper-]')) {
       // It has an embed.
       messageElement.classList.add('hasEmbed');
+      // Need to override the padding as important on the style element to counteract Discord's
+      // setting of it when clicking to react with an emoji.
+      messageElement.style.setProperty('padding', '0', 'important');
     }
 
     return false;
@@ -62,8 +67,6 @@ function removerFn() {
 if (!clsName) {
   throw 'Failed to find relevant element. Not starting the interval.';
 }
-// The one that will need to float left.
-removerMessageClass = getClassNameStartingWith('cozyMessage', queryFrom);
 
 window.lastRemoverInterval = setInterval(removerFn, 200);
 
@@ -93,8 +96,11 @@ removerStyleEl.innerHTML = `
         float: left;
         max-width: 230px !important;
     }
-    .${removerMessageClass}.hasEmbed {
-        padding: 0 !important;
+    .${removerMessageClass}.${removerMessageClass} {
+        /* .group-start- */
+        margin-top: 0;
+        padding-top: 0;
+        padding-bottom: 0;
     }
     .hasEmbed .${avatarClassName} {
         display: none;
@@ -105,9 +111,7 @@ removerStyleEl.innerHTML = `
     .rollText {
         float: none;
         clear: both;
-        height: 50px;
     }
-
     div[class^=sidebar-]:not(:hover) {
         width: 50px;
     }
