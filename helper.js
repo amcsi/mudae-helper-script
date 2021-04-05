@@ -71,7 +71,7 @@ function removerFn() {
       ) {
         // Timer time!
 
-        const alreadyClaimed = !innerText.includes('Belongs to ');
+        const alreadyClaimed = innerText.includes('Belongs to ');
 
         const timerDiv = document.createElement('div');
         timerDiv.classList.add('removerTimer');
