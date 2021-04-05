@@ -63,8 +63,15 @@ function removerFn() {
       // setting of it when clicking to react with an emoji.
       messageElement.style.setProperty('padding', '0', 'important');
 
-      if (messageElement.innerText.includes('React with any emoji to claim!')) {
+      const innerText = messageElement.innerText;
+      if (
+        messageElement.querySelector('a[class*=embedImage-]')
+        && innerText.includes('Claims:') && innerText.includes('Likes:')
+        && !(messageElement.querySelector('span[class*=embedFooterText-]')?.innerText ?? '').match(/^\d+\/\d+\b/)
+      ) {
         // Timer time!
+
+        const alreadyClaimed = !innerText.includes('Belongs to ');
 
         const timerDiv = document.createElement('div');
         timerDiv.classList.add('removerTimer');
@@ -75,11 +82,15 @@ function removerFn() {
             return;
           }
 
-          timerDiv.innerText = `🔒 Time is up.`;
+          if (secondsLeft === false) {
+            timerDiv.innerText = `🔒 Already claimed.`;
+          } else {
+            timerDiv.innerText = `🔒 Time is up.`;
+          }
           messageElement.classList.add('timeIsUp');
 
           if (!interval) {
-              return;
+            return;
           }
           clearInterval(interval);
           const index = window.lastRemoverIntervals.indexOf(interval);
@@ -90,9 +101,13 @@ function removerFn() {
         }
         embedWrapper.append(timerDiv);
 
+        if (alreadyClaimed) {
+          setTimerSecondsLeft(false);
+          return false;
+        }
         if (justEnteredChannel) {
-            setTimerSecondsLeft(0);
-            return false;
+          setTimerSecondsLeft(0);
+          return false;
         }
 
         setTimerSecondsLeft(secondsToClaim);
