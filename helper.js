@@ -66,7 +66,7 @@ function removerFn() {
       const innerText = messageElement.innerText;
       if (
         messageElement.querySelector('a[class*=embedImage-]')
-        && innerText.includes('Claims:') && innerText.includes('Likes:')
+        && !innerText.includes('Claim Rank:')
         && !(messageElement.querySelector('span[class*=embedFooterText-]')?.innerText ?? '').match(/^\d+\/\d+\b/)
       ) {
         // Timer time!
