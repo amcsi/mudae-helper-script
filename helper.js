@@ -36,7 +36,7 @@ function removerTypeText(textToType) {
 
   const typingArea = typingContainer.querySelector('[data-slate-string]');
   if (!typingArea) {
-    console.info(':(');
+    console.warn('Could not find typing area');
     return;
   }
   typingArea.innerHTML = `${textToType}<br>`;
@@ -133,13 +133,12 @@ function removerFn() {
         embedWrapper.append(timerDiv);
 
         const nameElement = embedWrapper.querySelector('[class*=embedAuthor-]');
-        console.info({nameElement});
         // $im helper.
         if (nameElement) {
           const name = nameElement.innerText;
           const infoMarryLink = document.createElement('a');
           infoMarryLink.href = '#';
-          infoMarryLink.addEventListener('click', evt => {
+          infoMarryLink.addEventListener('mousedown', evt => {
             evt.preventDefault();
             // Type the name.
             removerTypeText(`$im ${name} $2`);
