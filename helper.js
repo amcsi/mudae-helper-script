@@ -18,6 +18,37 @@ avatarClassName = getClassNameStartingWith('avatar', queryFrom.querySelector(`.$
 
 queryForRemover = `.${clsName}:not(.iMarkedThis)`;
 
+// Types out text in the text input field.
+function removerTypeText(textToType) {
+  const typingContainer = queryFrom.querySelector(`[class*=slateTextArea-]`);
+  if (!typingContainer) {
+    console.warn('Typing container not found');
+    return;
+  }
+  typingContainer.focus();
+  typingContainer.click();
+
+  const emptyStringElement = typingContainer.querySelector(`[data-slate-zero-width]`);
+  if (emptyStringElement) {
+    // Trick to allow typing to work even if the text box is currently empty.
+    emptyStringElement.setAttribute('data-slate-string', '');
+  }
+
+  const typingArea = typingContainer.querySelector('[data-slate-string]');
+  if (!typingArea) {
+    console.info(':(');
+    return;
+  }
+  typingArea.innerHTML = `${textToType}<br>`;
+  typingContainer.focus();
+  // Not doing the following would require you to add some typing unless it would just send the
+  // placeholder that you typed.
+  typingContainer.dispatchEvent(new window.KeyboardEvent('input', {
+    bubbles: true,
+    key: ' ',
+  }));
+}
+
 function removerFn() {
   numRemoved = 0;
   var elements = queryFrom.querySelectorAll(queryForRemover);
@@ -100,6 +131,23 @@ function removerFn() {
           }
         }
         embedWrapper.append(timerDiv);
+
+        const nameElement = embedWrapper.querySelector('[class*=embedAuthor-]');
+        console.info({nameElement});
+        // $im helper.
+        if (nameElement) {
+          const name = nameElement.innerText;
+          const infoMarryLink = document.createElement('a');
+          infoMarryLink.href = '#';
+          infoMarryLink.addEventListener('click', evt => {
+            evt.preventDefault();
+            // Type the name.
+            removerTypeText(`$im ${name} $2`);
+          });
+          infoMarryLink.style.marginLeft = '8px';
+          infoMarryLink.innerText = '$im';
+          nameElement.appendChild(infoMarryLink);
+        }
 
         if (alreadyClaimed) {
           setTimerSecondsLeft(false);
