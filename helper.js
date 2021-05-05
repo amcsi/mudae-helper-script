@@ -77,7 +77,11 @@ function removerFn() {
       return true;
     }
 
-    if (text.match(/\broll/i) || text.includes("you can't claim for another") || text.includes('you can claim right now')) {
+    if (
+      (text.match(/\broll/i) && !text.includes('the roulette is limited to'))
+      || text.includes('you can\'t claim for another')
+      || text.includes('you can claim right now')
+    ) {
       // A comment with "rolls" in it? Or a $tu result? Mark it with a class to do float clearing.
       try {
         messageElement.classList.add('rollText');
