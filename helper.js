@@ -5,7 +5,9 @@ window.lastRemoverIntervals = [];
 
 queryFrom = document.querySelector('main').parentElement;
 
-secondsToClaim = 43;
+baseSecondsToClaim = 45;
+// To be pessimistic and account for delays, let's always subtract this amount in advance for timers.
+safetyBufferSeconds = 2;
 
 function getClassNameStartingWith(name, queryFrom = document) {
   return [...(queryFrom.querySelector(`[class*=${name}-]`)?.classList ?? [])].find(v => v.startsWith(`${name}-`));
@@ -105,6 +107,13 @@ function removerFn() {
         && !(messageElement.querySelector('span[class*=embedFooterText-]')?.innerText ?? '').match(/^\d+\/\d+\b/)
       ) {
         // Timer time!
+
+        let secondsToClaim = baseSecondsToClaim;
+        if (messageElement.querySelector('div[class*=executedCommand-]')) {
+          // The roll was a reply to a slash command. That means we have 2x the reaction time.
+          secondsToClaim *= 2;
+        }
+        secondsToClaim -= safetyBufferSeconds;
 
         const alreadyClaimed = innerText.includes('Belongs to ');
 
