@@ -13,6 +13,8 @@ function getClassNameStartingWith(name, queryFrom = document) {
   return [...(queryFrom.querySelector(`[class*=${name}-]`)?.classList ?? [])].find(v => v.startsWith(`${name}-`));
 }
 
+messagesContainerClass = getClassNameStartingWith('scrollerInner', queryFrom);
+
 clsName = getClassNameStartingWith('messageContent', queryFrom);
 // The one that will need to float left.
 removerMessageClass = getClassNameStartingWith('cozyMessage', queryFrom);
@@ -216,8 +218,15 @@ if (!removerStyleEl) {
 
 // CSS.
 removerStyleEl.innerHTML = `
+    .${messagesContainerClass} {
+        display: flex;
+        flex-wrap: wrap;    
+    }
     .${removerMessageClass} {
-        float: left;
+        /* Gives a tiny bit of room between rows of posts */
+        margin-bottom: 5px;
+    }
+    .${removerMessageClass}:not(.rollText) {
         max-width: 230px !important;
     }
     .${removerMessageClass}.${removerMessageClass} {
@@ -229,12 +238,8 @@ removerStyleEl.innerHTML = `
     .hasEmbed .${avatarClassName} {
         display: none;
     }
-    .${removerMessageClass}.${removerMessageClass}:not(.rollText) {
-        min-height: 588px;
-    }
     .rollText {
-        float: none;
-        clear: both;
+        width: 100%;
     }
     div[class^=sidebar-]:not(:hover) {
         width: 50px;
