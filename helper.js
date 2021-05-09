@@ -230,7 +230,7 @@ removerStyleEl.innerHTML = `
         display: none;
     }
     .${removerMessageClass}.${removerMessageClass}:not(.rollText) {
-        min-height: 585px;
+        min-height: 588px;
     }
     .rollText {
         float: none;
