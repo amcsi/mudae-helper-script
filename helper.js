@@ -110,6 +110,8 @@ function removerFn() {
       ) {
         // Timer time!
 
+        messageElement.classList.add('hasTimer');
+
         let secondsToClaim = baseSecondsToClaim;
         if (messageElement.querySelector('div[class*=executedCommand-]')) {
           // The roll was a reply to a slash command. That means we have 2x the reaction time.
@@ -243,6 +245,9 @@ removerStyleEl.innerHTML = `
     }
     div[class^=sidebar-]:not(:hover) {
         width: 50px;
+    }
+    .hasTimer div[class^=embedWrapper-] {
+        background-color: #020;
     }
     .timeIsUp div[class^=embedWrapper-] {
         background-color: #111;
