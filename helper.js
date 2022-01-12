@@ -97,11 +97,13 @@ function removerFn() {
 
     const embedWrapper = messageElement.querySelector('[class*=embedWrapper-]')
     if (embedWrapper) {
+      const cozyMessage = messageElement.getElementsByClassName(removerMessageClass)[0];
+
       // It has an embed.
       messageElement.classList.add('hasEmbed');
       // Need to override the padding as important on the style element to counteract Discord's
       // setting of it when clicking to react with an emoji.
-      messageElement.style.setProperty('padding', '0', 'important');
+      cozyMessage.style.setProperty('padding-right', '0', 'important');
 
       const innerText = messageElement.innerText;
       if (
@@ -230,11 +232,12 @@ removerStyleEl.innerHTML = `
     .${removerMessageClass}:not(.rollText) {
         max-width: 230px !important;
     }
-    .${removerMessageClass}.${removerMessageClass} {
+    .hasEmbed .${removerMessageClass}.${removerMessageClass} {
         /* .group-start- */
         margin-top: 0;
         padding-top: 0;
         padding-bottom: 0;
+        padding-left: 0;
     }
     .hasEmbed .${avatarClassName} {
         display: none;
