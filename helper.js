@@ -15,12 +15,13 @@ function getClassNameStartingWith(name, queryFrom = document) {
 
 messagesContainerClass = getClassNameStartingWith('scrollerInner', queryFrom);
 
-clsName = getClassNameStartingWith('messageContent', queryFrom);
+listItemClsName = getClassNameStartingWith('messageListItem', queryFrom);
+messageContentClsName = getClassNameStartingWith('messageContent', queryFrom);
 // The one that will need to float left.
 removerMessageClass = getClassNameStartingWith('cozyMessage', queryFrom);
 avatarClassName = getClassNameStartingWith('avatar', queryFrom.querySelector(`.${removerMessageClass}`));
 
-queryForRemover = `.${clsName}:not(.iMarkedThis)`;
+queryForRemover = `.${listItemClsName}:not(.iMarkedThis)`;
 
 // Types out text in the text input field.
 function removerTypeText(textToType) {
@@ -58,15 +59,15 @@ function removerFn() {
   var elements = queryFrom.querySelectorAll(queryForRemover);
   const numElements = elements.length;
 
+  console.info(`found ${numElements} elements`);
+
   // If there are really large amount of unmarked messages, then we probably just ran the script, or just entered this channel.
   justEnteredChannel = numElements > 40;
 
-  [...elements].map(v => {
-    v.classList.add('iMarkedThis');
+  [...elements].map(messageElement => {
+    messageElement.classList.add('iMarkedThis');
 
-    const text = v.innerText;
-
-    const messageElement = v.closest('[role=listitem]');
+    const text = messageElement.getElementsByClassName(messageContentClsName)[0]?.innerText ?? '';
 
     if (text.match(/^\$[wh][ga]?$/)) {
       // Roll command. Hide the text.
@@ -190,7 +191,7 @@ function removerFn() {
     console.info(`removed ${numRemoved} comments`);
   }
 }
-if (!clsName) {
+if (!messageContentClsName) {
   throw 'Failed to find relevant element. Not starting the interval.';
 }
 
