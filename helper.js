@@ -109,7 +109,7 @@ function removerFn() {
 
       const innerText = messageElement.innerText;
       if (
-        messageElement.querySelector('a[class*=embedImage-]')
+        messageElement.querySelector('[class*=embedImage-]')
         && !innerText.includes('Claim Rank:')
         && !(messageElement.querySelector('span[class*=embedFooterText-]')?.innerText ?? '').match(/^\d+\/\d+\b/)
       ) {
@@ -250,7 +250,7 @@ removerStyleEl.innerHTML = `
     div[class^=sidebar-]:not(:hover) {
         width: 50px;
     }
-    .timeIsUp div[class^=embedWrapper-] {
+    .timeIsUp [class^=embedWrapper-] {
         background-color: #111;
     }
     .removerTimer {
