@@ -59,7 +59,9 @@ function removerFn() {
   var elements = queryFrom.querySelectorAll(queryForRemover);
   const numElements = elements.length;
 
-  console.info(`found ${numElements} elements`);
+  if (numElements) {
+    console.info(`found ${numElements} elements`);
+  }
 
   // If there are really large amount of unmarked messages, then we probably just ran the script, or just entered this channel.
   justEnteredChannel = numElements > 40;
