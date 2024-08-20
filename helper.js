@@ -227,9 +227,11 @@ removerStyleEl.innerHTML = `
         display: flex;
         flex-wrap: wrap;    
     }
-    .${removerMessageClass} {
+    .${removerMessageClass}.${removerMessageClass} {
         /* Gives a tiny bit of room between rows of posts */
         margin-bottom: 5px;
+        padding-left: 0;
+        margin-right: -45px;
     }
     .${removerMessageClass}:not(.rollText) {
         max-width: 230px !important;
