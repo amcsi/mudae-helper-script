@@ -10,7 +10,7 @@ baseSecondsToClaim = 45;
 safetyBufferSeconds = 2;
 
 function getClassNameStartingWith(name, queryFrom = document) {
-  return [...(queryFrom.querySelector(`[class*=${name}-]`)?.classList ?? [])].find(v => v.startsWith(`${name}-`));
+  return [...(queryFrom.querySelector(`[class*=${name}_]`)?.classList ?? [])].find(v => v.startsWith(`${name}_`));
 }
 
 messagesContainerClass = getClassNameStartingWith('scrollerInner', queryFrom);
